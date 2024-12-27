@@ -1,3 +1,8 @@
+pub mod scrape;
+
+use scrape::scraper;
+
 fn main() {
-    println!("Hello, world!");
+    scraper();
+    println!("yo");
 }
