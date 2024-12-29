@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-fantoccini = "0.21.3"
+fantoccini = "0.20.0"
 tokio = { version = "1", features = ["full"] }
