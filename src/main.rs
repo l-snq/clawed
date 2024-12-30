@@ -2,7 +2,6 @@ use fantoccini::{ClientBuilder, Locator};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Connect to webdriver instance that is listening on port 4444
     let client = ClientBuilder::native()
         .connect("http://localhost:4444")
         .await?;
@@ -13,7 +12,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(c_url.as_ref(), "https://google.com");
 
     client.find(Locator::LinkText("Francais")).await?.click().await?;
-    
 
     Ok(())
 }
