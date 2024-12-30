@@ -6,12 +6,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect("http://localhost:4444")
         .await?;
 
-    client.goto("https://google.com").await?;
-
+    client.goto("https://www.redflagdeals.com/in/edmonton/flyers/categories/groceries/").await?;
     let c_url = client.current_url().await?;
-    assert_eq!(c_url.as_ref(), "https://google.com");
+    assert_eq!(c_url.as_ref(), "https://www.redflagdeals.com/in/edmonton/flyers/categories/groceries/");
 
-    client.find(Locator::LinkText("Francais")).await?.click().await?;
-
+    client.find(Locator::LinkText("Hot Deals")).await?.click().await?;
+    
     Ok(())
 }
