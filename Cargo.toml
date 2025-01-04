@@ -5,4 +5,5 @@ edition = "2021"
 
 [dependencies]
 fantoccini = "0.20.0"
+tauri = "2.2.0"
 tokio = { version = "1", features = ["full"] }
