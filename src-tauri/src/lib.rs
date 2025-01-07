@@ -1,4 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use fantoccini::ClientBuilder;
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -7,6 +8,11 @@ fn greet(name: &str) -> String {
 #[tauri::command]
 fn ping() -> String {
     format!("piiiiiiiiiiiiiiing")
+}
+
+#[tauri::command]
+fn scrape() {
+    let client = ClientBuilder::new("127.0.0.1:4444");
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
