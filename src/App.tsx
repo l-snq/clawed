@@ -22,7 +22,7 @@ function App() {
 			<div>
 				<button onClick={(e) => {
 					ping();
-					setSomething("hello")
+					setSomething(something)
 				}}> click me</button>
 				<p>{something}</p>
 			</div>
