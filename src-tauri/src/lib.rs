@@ -1,5 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use fantoccini::ClientBuilder;
+use fantoccini::{ClientBuilder, Locator};
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -11,8 +11,11 @@ fn ping(something: &str) -> String {
 }
 
 #[tauri::command]
-fn scrape() {
-    let client = ClientBuilder::new("127.0.0.1:4444");
+#[tokio::main]
+async fn scrape() -> Result<(), fantoccini::error::CmdError> {
+    let client = ClientBuilder::native().connect("127.0.0.1:4444").await.expect("failed to initiate connection to web driver");
+
+    client.close().await
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
