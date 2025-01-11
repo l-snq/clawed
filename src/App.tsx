@@ -14,6 +14,7 @@ function App() {
 
 	async function ping() {
 		setPingMsg(await invoke("ping", { something }));
+		console.log(setPingMsg);
 	}
 
   return (
@@ -24,7 +25,7 @@ function App() {
 					ping();
 					setSomething(something)
 				}}> click me</button>
-				<p>{something}</p>
+				<p>{pingMsg}</p>
 			</div>
 
       <form
