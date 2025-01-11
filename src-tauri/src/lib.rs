@@ -13,7 +13,14 @@ fn ping(something: &str) -> String {
 #[tauri::command]
 #[tokio::main]
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
-    let client = ClientBuilder::native().connect("127.0.0.1:4444").await.expect("failed to initiate connection to web driver");
+    let client = ClientBuilder::native().connect("http://localhost:4444").await.expect("failed to initiate connection to web driver");
+    client.goto("https://github.com/l-snq/").await?;
+    let url = client.current_url().await?;
+
+    assert_eq!(url.as_ref(), "https://github.com/l-snq");
+
+    //https://github.com/l-snq?tab=repositories
+    client.find(Locator::LinkText("Repositories")).await?;
 
     client.close().await
 }
@@ -24,6 +31,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![greet])
         .invoke_handler(tauri::generate_handler![ping])
+        .invoke_handler(tauri::generate_handler![scrape])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
