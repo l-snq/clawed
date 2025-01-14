@@ -13,7 +13,10 @@ fn ping(something: &str) -> String {
 #[tauri::command]
 #[tokio::main]
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
-    let client = ClientBuilder::native().connect("http://localhost:4444").await.expect("failed to initiate connection to web driver");
+    let client = ClientBuilder::native()
+        .connect("http://localhost:4444")
+        .await
+        .expect("failed to initiate connection to web driver");
     client.goto("https://github.com/l-snq/").await?;
     let url = client.current_url().await?;
 
