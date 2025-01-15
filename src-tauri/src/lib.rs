@@ -20,6 +20,7 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
         "args": ["-headless"]
     }));
     let client = ClientBuilder::native()
+        .capabilities(caps)
         .connect("http://localhost:4444")
         .await
         .expect("failed to initiate connection to web driver");
