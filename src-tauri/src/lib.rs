@@ -1,5 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use fantoccini::{ClientBuilder, Locator};
+use fantoccini::{ClientBuilder, wd::Capabilities, Locator};
+use serde_json::json;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -12,6 +14,11 @@ fn ping(something: &str) -> String {
 
 #[tokio::main]
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
+    // we are going to use capabilities to specify the browser to be headless.
+    let mut caps = Capabilities::new();
+    caps.insert("moz:firefoxOptions".to_string(), json!({
+        "args": ["-headless"]
+    }));
     let client = ClientBuilder::native()
         .connect("http://localhost:4444")
         .await

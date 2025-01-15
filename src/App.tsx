@@ -7,6 +7,7 @@ function App() {
   const [name, setName] = useState("");
 	const [pingMsg, setPingMsg ] = useState("");
 	const [something, setSomething] = useState("");
+	const [scrape, setScrape] = useState("");
 
   async function greet() {
     setGreetMsg(await invoke("greet", { name }));
@@ -17,6 +18,10 @@ function App() {
 		console.log(setPingMsg);
 	}
 
+	async function scrapeReq() {
+		setScrape(await invoke("real", { scrape }));
+	}
+
   return (
     <main className="container">
       <h1>clawed. </h1>
@@ -24,8 +29,10 @@ function App() {
 				<button onClick={(e) => {
 					ping();
 					setSomething(something)
+					scrapeReq();
 				}}> click me</button>
 				<p>{pingMsg}</p>
+				<p>{scrape}</p>
 			</div>
 
       <form
