@@ -21,7 +21,7 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
     }));
     let client = ClientBuilder::native()
         .capabilities(caps)
-        .connect("http://localhost:4444")
+        .connect("http://127.0.0.1:4444")
         .await
         .expect("failed to initiate connection to web driver");
     
@@ -37,9 +37,8 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
 }
 
 #[tauri::command]
-fn real() -> String {
-    scrape();
-    "hello".to_string()
+fn real() {
+    scrape().expect("wasn't able to scrape.");
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
