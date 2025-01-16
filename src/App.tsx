@@ -5,18 +5,12 @@ import "./App.css";
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
-	const [pingMsg, setPingMsg ] = useState("");
 	const [something, setSomething] = useState("");
 	const [scrape, setScrape] = useState("");
 
   async function greet() {
     setGreetMsg(await invoke("greet", { name }));
   }
-
-	async function ping() {
-		setPingMsg(await invoke("ping", { something }));
-		console.log(setPingMsg);
-	}
 
 	async function scrapeReq() {
 		setScrape(await invoke("real", { scrape }));
@@ -27,7 +21,6 @@ function App() {
       <h1>clawed. </h1>
 			<div>
 				<button onClick={(e) => {
-					ping();
 					setSomething(something)
 					scrapeReq();
 				}}> click me</button>

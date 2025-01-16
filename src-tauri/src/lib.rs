@@ -7,11 +7,6 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
-fn ping(something: &str) -> String {
-    format!("piiiiiiiiiiiiiiing, {}", something)
-}
-
 #[tokio::main]
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
     // we are going to use capabilities to specify the browser to be headless.
@@ -46,7 +41,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![ping])
         .invoke_handler(tauri::generate_handler![real])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
