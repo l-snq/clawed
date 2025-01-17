@@ -26,7 +26,7 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
     assert_eq!(url.as_ref(), "https://github.com/l-snq");
 
     //https://github.com/l-snq?tab=repositories
-    client.find(Locator::LinkText("Repositories")).await?;
+    let repository = client.find(Locator::LinkText("Repositories")).await?;
 
     client.close().await
 }
