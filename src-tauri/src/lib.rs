@@ -11,9 +11,22 @@ fn greet(name: &str) -> String {
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
     // we are going to use capabilities to specify the browser to be headless.
     let mut caps = Capabilities::new();
-    caps.insert("moz:firefoxOptions".to_string(), json!({
-        "args": ["-headless"]
-    }));
+    let chrome_opts = serde_json::json!({
+        "args": [
+            "--headless",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--disable-dev-shm-usage"
+        ],
+        "binary": "",
+        "w3c": true
+    });
+
+    caps.insert(
+        "goog:chromeOptions".to_string(),
+        chrome_opts 
+    );
+
     let client = ClientBuilder::native()
         .capabilities(caps)
         .connect("http://127.0.0.1:4444")
