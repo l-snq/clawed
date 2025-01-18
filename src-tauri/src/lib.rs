@@ -9,7 +9,6 @@ fn greet(name: &str) -> String {
 
 #[tokio::main]
 async fn scrape() -> Result<(), fantoccini::error::CmdError> {
-    // we are going to use capabilities to specify the browser to be headless.
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
         "args": [
