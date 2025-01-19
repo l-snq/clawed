@@ -35,10 +35,11 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
     client.goto("https://github.com/l-snq/").await?;
     let url = client.current_url().await?;
 
-    assert_eq!(url.as_ref(), "https://github.com/l-snq");
+    assert_eq!(url.as_ref(), "https://github.com/l-snq/");
 
-    //https://github.com/l-snq?tab=repositories
-    let repository = client.find(Locator::LinkText("Repositories")).await?;
+    // https://github.com/l-snq?
+    // [data-tab-item='repositories']
+    let repository = client.find(Locator::Css("a[data-tab-item='repositories']")).await?;
 
     client.close().await
 }

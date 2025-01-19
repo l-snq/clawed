@@ -24,7 +24,6 @@ function App() {
 					setSomething(something)
 					scrapeReq();
 				}}> click me</button>
-				<p>{pingMsg}</p>
 				<p>{scrape}</p>
 			</div>
 
