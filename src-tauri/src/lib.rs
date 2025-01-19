@@ -39,7 +39,17 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
 
     // https://github.com/l-snq?
     // [data-tab-item='repositories']
-    let repository = client.find(Locator::Css("a[data-tab-item='repositories']")).await?;
+    // "a[data-tab-item='repositories']"
+    let repository = client
+        .find(Locator::Css("a[data-tab-item='repositories']")).await?;
+    let elements = client
+        .find_all(Locator::Css("a"))
+        .await?;
+
+    for element in elements {
+        println!("all links on this page: {}", element.text().await?);
+    }
+
 
     client.close().await
 }
