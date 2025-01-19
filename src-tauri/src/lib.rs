@@ -2,13 +2,18 @@
 use fantoccini::{ClientBuilder, wd::Capabilities, Locator};
 use serde_json::json;
 
+#[derive(Debug)]
+struct AllElements {
+    text: Vec<String>,
+}
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
 #[tokio::main]
-async fn scrape() -> Result<(), fantoccini::error::CmdError> {
+async fn scrape(state: &mut AllElements) -> Result<(), fantoccini::error::CmdError> {
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
         "args": [
@@ -48,15 +53,22 @@ async fn scrape() -> Result<(), fantoccini::error::CmdError> {
 
     for element in elements {
         println!("all links on this page: {}", element.text().await?);
-    }
+        if let Ok(value) = element.text().await {
+            state.text.push(value);
 
+        }
+    }
 
     client.close().await
 }
 
 #[tauri::command]
 fn real() {
-    scrape().expect("wasn't able to scrape.");
+    let mut elements = AllElements {
+        text: vec![],
+    };
+
+    scrape(&mut elements).expect("wasn't able to scrape.");
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
