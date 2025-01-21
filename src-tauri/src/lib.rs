@@ -62,13 +62,15 @@ async fn scrape(state: &mut AllElements) -> Result<(), fantoccini::error::CmdErr
     client.close().await
 }
 
+// https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn real() {
+fn real() -> AllElements {
     let mut elements = AllElements {
         text: vec![],
     };
 
     scrape(&mut elements).expect("wasn't able to scrape.");
+    elements
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
