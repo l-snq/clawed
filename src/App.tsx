@@ -22,6 +22,7 @@ function App() {
 			<div>
 				<button onClick={(e) => {
 					setSomething(something)
+					setScrape(scrape)
 					scrapeReq();
 				}}> click me</button>
 				<p>{scrape}</p>

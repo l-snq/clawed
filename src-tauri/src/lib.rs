@@ -13,7 +13,7 @@ fn greet(name: &str) -> String {
 }
 
 #[tokio::main]
-async fn scrape(state: &mut AllElements) -> Result<(), fantoccini::error::CmdError> {
+async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
         "args": [
@@ -59,18 +59,18 @@ async fn scrape(state: &mut AllElements) -> Result<(), fantoccini::error::CmdErr
         }
     }
 
-    client.close().await
+    client.close().await;
+    Ok(state)
 }
 
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn real() -> AllElements {
+fn real() {
     let mut elements = AllElements {
         text: vec![],
     };
 
     scrape(&mut elements).expect("wasn't able to scrape.");
-    elements
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
