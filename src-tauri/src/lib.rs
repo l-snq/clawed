@@ -63,14 +63,30 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     Ok(state)
 }
 
-// https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
-#[tauri::command]
-fn real() {
+fn processScrapeData() -> Vec<String> {
+    //this will take the scraped data and convert it into an 
+    //array of strings, those are to be
+    //rendered client side.
     let mut elements = AllElements {
         text: vec![],
     };
+    
+    scrape(&mut elements).expect("can't scrape");
 
-    scrape(&mut elements).expect("wasn't able to scrape.");
+    let mut string: Vec<String> = Vec::new();
+
+    for i in elements.text {
+        string.push(i);
+    }
+
+    string
+
+}
+
+// https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
+#[tauri::command]
+fn scrapeDataCommand() -> Vec<String> {
+    processScrapeData()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -78,7 +94,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![real])
+        .invoke_handler(tauri::generate_handler![scrapeDataCommand])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

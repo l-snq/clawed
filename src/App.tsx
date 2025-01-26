@@ -13,8 +13,10 @@ function App() {
   }
 
 	async function scrapeReq() {
-		setScrape(await invoke("real", { scrape }));
+		setScrape(await invoke("scrapeDataCommand", { scrape }));
 	}
+
+	console.log(scrape);
 
   return (
     <main className="container">
@@ -25,7 +27,9 @@ function App() {
 					setScrape(scrape)
 					scrapeReq();
 				}}> click me</button>
-				<p>{scrape}</p>
+				<p>
+					{scrape}
+				</p>
 			</div>
 
       <form
