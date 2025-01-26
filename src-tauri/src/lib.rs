@@ -1,6 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use fantoccini::{ClientBuilder, wd::Capabilities, Locator};
-use serde_json::json;
+use fantoccini::{wd::Capabilities, ClientBuilder, Locator};
 
 #[derive(Debug)]
 struct AllElements {
@@ -26,17 +25,14 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
         "w3c": true
     });
 
-    caps.insert(
-        "goog:chromeOptions".to_string(),
-        chrome_opts 
-    );
+    caps.insert("goog:chromeOptions".to_string(), chrome_opts);
 
     let client = ClientBuilder::native()
         .capabilities(caps)
         .connect("http://127.0.0.1:4444")
         .await
         .expect("failed to initiate connection to web driver");
-    
+
     client.goto("https://github.com/l-snq/").await?;
     let url = client.current_url().await?;
 
@@ -46,16 +42,14 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     // [data-tab-item='repositories']
     // "a[data-tab-item='repositories']"
     let repository = client
-        .find(Locator::Css("a[data-tab-item='repositories']")).await?;
-    let elements = client
-        .find_all(Locator::Css("a"))
+        .find(Locator::Css("a[data-tab-item='repositories']"))
         .await?;
+    let elements = client.find_all(Locator::Css("a")).await?;
 
     for element in elements {
-        println!("all links on this page: {}", element.text().await?);
         if let Ok(value) = element.text().await {
             state.text.push(value);
-
+            println!("{:?}", state.text);
         }
     }
 
@@ -64,13 +58,11 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
 }
 
 fn processScrapeData() -> Vec<String> {
-    //this will take the scraped data and convert it into an 
+    //this will take the scraped data and convert it into an
     //array of strings, those are to be
     //rendered client side.
-    let mut elements = AllElements {
-        text: vec![],
-    };
-    
+    let mut elements = AllElements { text: vec![] };
+
     scrape(&mut elements).expect("can't scrape");
 
     let mut string: Vec<String> = Vec::new();
@@ -80,7 +72,6 @@ fn processScrapeData() -> Vec<String> {
     }
 
     string
-
 }
 
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
