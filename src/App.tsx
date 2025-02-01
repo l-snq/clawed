@@ -17,9 +17,6 @@ function App() {
 	}
 
 	console.log(scrape);
-	/*for (let i = 0; i < scrape.length; i++) {
-
-	}*/
 
   return (
     <main className="container">
