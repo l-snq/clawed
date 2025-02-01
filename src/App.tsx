@@ -17,6 +17,7 @@ function App() {
 	}
 
 	console.log(scrape);
+	const scrapedItems = [scrape];
 
   return (
     <main className="container">
@@ -27,6 +28,14 @@ function App() {
 					setScrape(scrape)
 					scrapeReq();
 				}}> click me</button>
+				<div id="scrapeList">
+					{scrapedItems.map(data => (
+						<div id="scrapeItem">
+							<h1>hi:</h1>
+							{data}
+						</div>
+					))}
+				</div>
 				<p>
 					{scrape}
 				</p>

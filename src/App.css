@@ -112,3 +112,12 @@ button {
     background-color: #0f0f0f69;
   }
 }
+
+#scrapeList {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	background-color: black;
+	color: white;
+}

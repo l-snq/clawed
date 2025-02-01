@@ -49,7 +49,6 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     for element in elements {
         if let Ok(value) = element.text().await {
             state.text.push(value);
-            println!("{:?}", state.text);
         }
     }
 
