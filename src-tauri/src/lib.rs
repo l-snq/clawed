@@ -70,6 +70,8 @@ fn processScrapeData() -> Vec<String> {
         string.push(i);
     }
 
+    string.retain(|s| !s.trim().is_empty()); // sanitize vector
+
     string
 }
 

@@ -6,7 +6,7 @@ function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 	const [something, setSomething] = useState("");
-	const [scrape, setScrape] = useState("");
+	const [scrape, setScrape] = useState([]);
 
   async function greet() {
     setGreetMsg(await invoke("greet", { name }));
@@ -17,7 +17,9 @@ function App() {
 	}
 
 	console.log(scrape);
-	const scrapedItems = [scrape];
+	/*for (let i = 0; i < scrape.length; i++) {
+
+	}*/
 
   return (
     <main className="container">
@@ -29,33 +31,15 @@ function App() {
 					scrapeReq();
 				}}> click me</button>
 				<div id="scrapeList">
-					{scrapedItems.map(data => (
+					{scrape.map(data => (
 						<div id="scrapeItem">
 							<h1>hi:</h1>
 							{data}
 						</div>
 					))}
 				</div>
-				<p>
-					{scrape}
-				</p>
 			</div>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
     </main>
   );
 }
