@@ -4,6 +4,7 @@ use fantoccini::{wd::Capabilities, ClientBuilder, Locator};
 #[derive(Debug)]
 struct AllElements {
     text: Vec<String>,
+    link: Vec<String>,
 }
 
 #[tauri::command]
@@ -32,20 +33,30 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
         .connect("http://127.0.0.1:4444")
         .await
         .expect("failed to initiate connection to web driver");
-
-    client.goto("https://github.com/l-snq/").await?;
+    //https://www.flyers-on-line.com/current-weekly-flyers
+    client.goto("https://www.flyers-on-line.com/current-weekly-flyers").await?;
     let url = client.current_url().await?;
 
-    assert_eq!(url.as_ref(), "https://github.com/l-snq/");
-
-    let repository = client
-        .find(Locator::Css("a[data-tab-item='repositories']"))
-        .await?;
-    let elements = client.find_all(Locator::Css("a")).await?;
+    assert_eq!(url.as_ref(), "https://www.flyers-on-line.com/current-weekly-flyers");
+    let elements = client.find_all(Locator::Css("*")).await?;
 
     for element in elements {
         if let Ok(value) = element.text().await {
             state.text.push(value);
+        }
+    }
+
+    let links = client.find_all(Locator::Css("a")).await?;
+    for link in links {
+        if let Ok(value) = link.text().await {
+            state.link.push(value);
+        }
+    }
+
+    let images = client.find_all(Locator::Css("img")).await?;
+    for image in images {
+        if let Ok(value) = image.text().await {
+            println!("src: {}l", value);
         }
     }
 
@@ -57,7 +68,7 @@ fn processScrapeData() -> Vec<String> {
     //this will take the scraped data and convert it into an
     //array of strings, those are to be
     //rendered client side.
-    let mut elements = AllElements { text: vec![] };
+    let mut elements = AllElements { text: vec![], link: vec![] };
 
     scrape(&mut elements).expect("can't scrape");
 
