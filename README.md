@@ -1,7 +1,16 @@
-# Tauri + React + Typescript
+# * clawed *
+## A grocery coupon scraper.
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+### requirements
+1. have chromedriver running on port 4444
+2. have rust installed
 
-## Recommended IDE Setup
+### TODO!
+1. Implement a way to prevent captchas from being hit through either:
+    a) rotate user agents
+    b) follow through robots.txt on the website
+    c) proxies (is this part of A)?)
+2. Make the grocery coupon link dependent on your location.
+3. implement AI model to provide recipes
+4. categorize each ingredient(?)
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
