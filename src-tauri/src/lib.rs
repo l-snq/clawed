@@ -38,9 +38,6 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
 
     assert_eq!(url.as_ref(), "https://github.com/l-snq/");
 
-    // https://github.com/l-snq?
-    // [data-tab-item='repositories']
-    // "a[data-tab-item='repositories']"
     let repository = client
         .find(Locator::Css("a[data-tab-item='repositories']"))
         .await?;
