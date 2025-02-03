@@ -20,7 +20,8 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
             "--headless",
             "--no-sandbox",
             "--disable-gpu",
-            "--disable-dev-shm-usage"
+            "--disable-dev-shm-usage",
+            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         ],
         "binary": "",
         "w3c": true
@@ -50,13 +51,6 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     for link in links {
         if let Ok(value) = link.text().await {
             state.link.push(value);
-        }
-    }
-
-    let images = client.find_all(Locator::Css("img")).await?;
-    for image in images {
-        if let Ok(value) = image.text().await {
-            println!("src: {}l", value);
         }
     }
 
