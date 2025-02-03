@@ -30,7 +30,6 @@ function App() {
 				<div id="scrapeList">
 					{scrape.map(data => (
 						<div id="scrapeItem">
-							<h1>hi:</h1>
 							{data}
 						</div>
 					))}
