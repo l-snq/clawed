@@ -23,13 +23,6 @@ struct AllElements {
 #[tokio::main]
 async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
 
-    let mut s: String = rand::rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect();
-        println!("{}", s);
-        s.insert_str(0, "--user-agent=");
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
         "args": [
