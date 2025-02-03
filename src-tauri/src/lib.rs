@@ -1,5 +1,18 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use fantoccini::{wd::Capabilities, ClientBuilder, Locator};
+use rand::{distr::Alphanumeric, Rng};
+
+fn user_agent_gen() -> String {
+    let mut s: String = rand::rng()
+            .sample_iter(&Alphanumeric)
+            .take(16)
+            .map(char::from)
+            .collect();
+        println!("{}", s);
+        s.insert_str(0, "--user-agent=");
+        s
+}
+
 
 #[derive(Debug)]
 struct AllElements {
@@ -7,13 +20,16 @@ struct AllElements {
     link: Vec<String>,
 }
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[tokio::main]
 async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+
+    let mut s: String = rand::rng()
+            .sample_iter(&Alphanumeric)
+            .take(7)
+            .map(char::from)
+            .collect();
+        println!("{}", s);
+        s.insert_str(0, "--user-agent=");
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
         "args": [
@@ -21,11 +37,12 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
             "--no-sandbox",
             "--disable-gpu",
             "--disable-dev-shm-usage",
-            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            user_agent_gen(),
         ],
         "binary": "",
         "w3c": true
     });
+    println!("chrome opts: {}", chrome_opts);
 
     caps.insert("goog:chromeOptions".to_string(), chrome_opts);
 
@@ -87,7 +104,6 @@ fn scrapeDataCommand() -> Vec<String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
         .invoke_handler(tauri::generate_handler![scrapeDataCommand])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
