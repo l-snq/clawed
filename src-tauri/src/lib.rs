@@ -13,15 +13,21 @@ fn user_agent_gen() -> String {
         s
 }
 
-
 #[derive(Debug)]
 struct AllElements {
     text: Vec<String>,
     link: Vec<String>,
+    image: Vec<u8>,
 }
 
 #[tokio::main]
 async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+    // refactor this to specifically scrape specific things
+    // make 
+    // scrapeImages()
+    // scrapeLinks()
+    // scrapeTexts()
+    // and then pass in clientbuilder into each of those functions, run them in here.
 
     let mut caps = Capabilities::new();
     let chrome_opts = serde_json::json!({
@@ -64,6 +70,11 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
         }
     }
 
+
+    let image = client.find(Locator::Css("img")).await?;
+    let image_data = image.screenshot().await?;
+    state.image = image_data;
+
     client.close().await;
     Ok(state)
 }
@@ -72,7 +83,8 @@ fn processScrapeData() -> Vec<String> {
     //this will take the scraped data and convert it into an
     //array of strings, those are to be
     //rendered client side.
-    let mut elements = AllElements { text: vec![], link: vec![] };
+    // refactor this to specifically scrape specific things
+    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
 
     scrape(&mut elements).expect("can't scrape");
 
@@ -90,6 +102,7 @@ fn processScrapeData() -> Vec<String> {
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
 fn scrapeDataCommand() -> Vec<String> {
+    // refactor this to specifically scrape specific things
     processScrapeData()
 }
 
