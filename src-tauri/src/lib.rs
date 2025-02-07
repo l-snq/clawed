@@ -21,6 +21,30 @@ struct AllElements {
 }
 
 #[tokio::main]
+async fn scrape_links(client: Client, state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+    let elements = client.find_all(Locator::Css("a")).await?;
+
+    for element in elements {
+        if let Ok(value) = element.text().await {
+            state.text.push(value);
+        }
+    }
+    Ok(state)
+}
+
+#[tokio::main]
+async fn scrape_image(client: Client, state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+    let elements = client.find_all(Locator::Css("img")).await?;
+
+    for element in elements {
+        if let Ok(value) = element.text().await {
+            state.text.push(value);
+        }
+    }
+    Ok(state)
+}
+
+#[tokio::main]
 async fn scrape_text(client: Client, state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
     let elements = client.find_all(Locator::Css("*")).await?;
 
