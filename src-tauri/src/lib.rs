@@ -101,10 +101,8 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
 }
 
 fn processScrapeData() -> Vec<String> {
-    //this will take the scraped data and convert it into an
-    //array of strings, those are to be
-    //rendered client side.
-    // refactor this to specifically scrape specific things
+    // do the vector sanitation in scrape_text
+    // and then use this just to return the State, and push the state to the scrapeDataCommand.
     let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
 
     scrape(&mut elements).expect("can't scrape");
