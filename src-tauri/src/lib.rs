@@ -1,5 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use fantoccini::{wd::Capabilities, ClientBuilder, Locator};
+use fantoccini::{wd::Capabilities, Client, ClientBuilder, Locator};
 use rand::{distr::Alphanumeric, Rng};
 
 fn user_agent_gen() -> String {
@@ -18,6 +18,18 @@ struct AllElements {
     text: Vec<String>,
     link: Vec<String>,
     image: Vec<u8>,
+}
+
+#[tokio::main]
+async fn scrape_text(client: Client, state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+    let elements = client.find_all(Locator::Css("*")).await?;
+
+    for element in elements {
+        if let Ok(value) = element.text().await {
+            state.text.push(value);
+        }
+    }
+    Ok(state)
 }
 
 #[tokio::main]
@@ -55,13 +67,7 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     let url = client.current_url().await?;
 
     assert_eq!(url.as_ref(), "https://www.flyers-on-line.com/current-weekly-flyers");
-    let elements = client.find_all(Locator::Css("*")).await?;
-
-    for element in elements {
-        if let Ok(value) = element.text().await {
-            state.text.push(value);
-        }
-    }
+    scrape_text(client.clone(), state);
 
     let links = client.find_all(Locator::Css("a")).await?;
     for link in links {
