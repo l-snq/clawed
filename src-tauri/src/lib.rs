@@ -17,7 +17,7 @@ fn user_agent_gen() -> String {
 struct AllElements {
     text: Vec<String>,
     link: Vec<String>,
-    image: Vec<u8>,
+    image: Vec<Vec<u8>>,
 }
 
 #[tokio::main]
@@ -26,7 +26,7 @@ async fn scrape_links(client: Client, state: &mut AllElements) -> Result<&mut Al
 
     for element in elements {
         if let Ok(value) = element.text().await {
-            state.text.push(value);
+            state.link.push(value);
         }
     }
     Ok(state)
@@ -37,8 +37,9 @@ async fn scrape_image(client: Client, state: &mut AllElements) -> Result<&mut Al
     let elements = client.find_all(Locator::Css("img")).await?;
 
     for element in elements {
-        if let Ok(value) = element.text().await {
-            state.text.push(value);
+        if let Ok(value) = element.screenshot().await {
+            // this is expecting u8 instead of Vec<u8>??
+            state.image.push(value);
         }
     }
     Ok(state)
@@ -91,21 +92,11 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     let url = client.current_url().await?;
 
     assert_eq!(url.as_ref(), "https://www.flyers-on-line.com/current-weekly-flyers");
-    scrape_text(client.clone(), state);
+    scrape_text(client.clone(), state).expect("failed to scrape text");
+    scrape_links(client.clone(), state).expect("failed to scrape links");
+    scrape_image(client.clone(), state).expect("failed to scrape images");
 
-    let links = client.find_all(Locator::Css("a")).await?;
-    for link in links {
-        if let Ok(value) = link.text().await {
-            state.link.push(value);
-        }
-    }
-
-
-    let image = client.find(Locator::Css("img")).await?;
-    let image_data = image.screenshot().await?;
-    state.image = image_data;
-
-    client.close().await;
+    client.close().await.expect("something went wrong trying to close the client");
     Ok(state)
 }
 
