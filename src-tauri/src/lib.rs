@@ -100,7 +100,7 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     Ok(state)
 }
 
-fn processScrapeData() -> Vec<String> {
+fn process_scrape_data() -> Vec<String> {
     // do the vector sanitation in scrape_text
     // and then use this just to return the State, and push the state to the scrapeDataCommand.
     let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
@@ -120,16 +120,16 @@ fn processScrapeData() -> Vec<String> {
 
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn scrapeDataCommand() -> Vec<String> {
+fn scrape_data_command() -> Vec<String> {
     // refactor this to specifically scrape specific things
-    processScrapeData()
+    process_scrape_data()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![scrapeDataCommand])
+        .invoke_handler(tauri::generate_handler![scrape_data_command])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
