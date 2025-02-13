@@ -1,4 +1,3 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use fantoccini::{wd::Capabilities, Client, ClientBuilder, Locator};
 use rand::{distr::Alphanumeric, Rng};
 
