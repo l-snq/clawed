@@ -51,6 +51,7 @@ async fn scrape_text(client: Client, state: &mut AllElements) -> Result<&mut All
     for element in elements {
         if let Ok(value) = element.text().await {
             state.text.push(value);
+            state.text.retain(|s| !s.trim().is_empty());
         }
     }
     Ok(state)
@@ -99,29 +100,11 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     Ok(state)
 }
 
-fn process_scrape_data() -> Vec<String> {
-    // do the vector sanitation in scrape_text
-    // and then use this just to return the State, and push the state to the scrapeDataCommand.
-    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
-
-    scrape(&mut elements).expect("can't scrape");
-
-    let mut string: Vec<String> = Vec::new();
-
-    for i in elements.text {
-        string.push(i);
-    }
-
-    string.retain(|s| !s.trim().is_empty()); // sanitize vector
-
-    string
-}
-
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn scrape_data_command() -> Vec<String> {
-    // refactor this to specifically scrape specific things
-    process_scrape_data()
+fn scrape_data_command() {
+   let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
+   scrape(&mut elements).expect("can't scrape");
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
