@@ -102,9 +102,9 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
 
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn scrape_data_command() {
+fn scrape_data_command() -> Result<&mut AllElements, ()> {
    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
-   scrape(&mut elements).expect("can't scrape");
+   scrape(&mut elements)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
