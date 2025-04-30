@@ -6,7 +6,7 @@ function App() {
 	const [scrape, setScrape] = useState([]);
 
 	async function scrapeReq() {
-		setScrape(await invoke("scrapeDataCommand", { scrape }));
+		setScrape(await invoke("scrape_data_command", { scrape }));
 	}
 
 	console.log(scrape);
