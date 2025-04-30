@@ -1,5 +1,8 @@
-use fantoccini::{wd::Capabilities, Client, ClientBuilder, Locator};
+use fantoccini::{error::CmdError, wd::Capabilities, Client, ClientBuilder, Locator};
 use rand::{distr::Alphanumeric, Rng};
+use serde::{ser::Serializer, Deserializer, Serialize};
+use thiserror;
+use anyhow;
 
 fn user_agent_gen() -> String {
     let mut s: String = rand::rng()
@@ -58,7 +61,7 @@ async fn scrape_text(client: Client, state: &mut AllElements) -> Result<&mut All
 }
 
 #[tokio::main]
-async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
+async fn scrape(state: &mut AllElements) -> CommandResult<&mut AllElements, fantoccini::error::CmdError> {
     // refactor this to specifically scrape specific things
     // make 
     // scrapeImages()
@@ -100,11 +103,29 @@ async fn scrape(state: &mut AllElements) -> Result<&mut AllElements, fantoccini:
     Ok(state)
 }
 
+#[derive(Debug, thiserror::Error)]
+pub enum CommandError {
+    #[error(transparent)]
+    // make some error here
+    Io(#[from] std::io::Error)
+}
+
+// have to manually implement serialize for our error.
+impl Serialize for CommandError {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where 
+            S: Serializer,
+        {
+            serializer.serialize_str(self.to_string().as_ref())
+        }
+}
+
+pub type CommandResult<T, E = CommandError> = anyhow::Result<T, E>;
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn scrape_data_command() {
+fn scrape_data_command() -> CommandResult<AllElements> {
    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
-   scrape(&mut elements).expect("can't scrape");
+   scrape(&mut elements)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

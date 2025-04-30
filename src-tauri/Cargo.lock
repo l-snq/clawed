@@ -499,6 +499,7 @@ dependencies = [
 name = "clawed"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "fantoccini",
  "rand 0.9.0",
  "serde",
@@ -506,6 +507,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-opener",
+ "thiserror 2.0.12",
  "tokio",
  "tokio-macros 0.2.6",
 ]
