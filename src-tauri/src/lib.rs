@@ -125,7 +125,7 @@ pub type CommandResult<T, E = CommandError> = anyhow::Result<T, E>;
 #[tauri::command]
 fn scrape_data_command() -> CommandResult<AllElements> {
    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
-   scrape(&mut elements)
+   scrape(elements)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
