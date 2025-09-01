@@ -90,7 +90,6 @@ async fn scrape(state: &mut AllElements) -> CommandResult<&mut AllElements, fant
         .connect("http://127.0.0.1:4444")
         .await
         .expect("failed to initiate connection to web driver");
-    //https://www.flyers-on-line.com/current-weekly-flyers
     client.goto("https://www.flyers-on-line.com/current-weekly-flyers").await?;
     let url = client.current_url().await?;
 
