@@ -22,6 +22,22 @@ struct AllElements {
     image: Vec<Vec<u8>>,
 }
 
+#[derive(Debug, Clone)]
+struct Image {
+    image_data: Vec<Vec<u8>>,
+}
+
+#[derive(Debug, Copy, Clone)]
+struct link {
+
+}
+
+
+#[derive(Debug, Copy, Clone)]
+struct text {
+
+}
+
 #[tokio::main]
 async fn scrape_links(client: Client, state: &mut AllElements) -> Result<&mut AllElements, fantoccini::error::CmdError> {
     let elements = client.find_all(Locator::Css("a")).await?;

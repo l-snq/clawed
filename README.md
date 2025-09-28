@@ -11,5 +11,5 @@ A grocery coupon scraper.
 2. [ ] Make the grocery coupon link dependent on your location.
 3. [ ] implement AI model to provide recipes
 4. [ ] categorize each ingredient(?)
-5. [ ] fetch images
+5. [ ] fetch images (just get the bytecode directly)
 
