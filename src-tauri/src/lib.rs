@@ -138,7 +138,7 @@ impl Serialize for CommandError {
 pub type CommandResult<T, E = CommandError> = anyhow::Result<T, E>;
 // https://github.com/tauri-apps/tauri/discussions/3913 look at this!!
 #[tauri::command]
-fn scrape_data_command() -> CommandResult<AllElements> {
+fn scrape_data_command() -> CommandResult<String> {
    let mut elements = AllElements { text: vec![], link: vec![], image: vec![] };
    scrape(elements)
 }
